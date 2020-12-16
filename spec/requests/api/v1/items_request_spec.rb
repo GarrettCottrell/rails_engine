@@ -7,7 +7,6 @@ describe 'Items API' do
     get '/api/v1/items'
 
     expect(response).to be_successful
-
     items = JSON.parse(response.body, symbolize_names: true)
 
     expect(items.count).to eq(5)

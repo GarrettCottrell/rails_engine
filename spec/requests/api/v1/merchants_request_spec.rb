@@ -94,4 +94,28 @@ describe 'Merchants API' do
       expect(merchant_items[0][:unit_price]).to be_a(Float)
     end
   end
+
+  describe 'search API' do
+    it 'can find a merchant with inputed name search term' do
+      Merchant.create(name: 'GarrettMerchant')
+
+      get '/api/v1/merchants/find?name=Ga'
+      search_merchant = JSON.parse(response.body, symbolize_names: true)
+      expect(response).to be_successful
+      expect(search_merchant).to have_key(:id)
+      expect(search_merchant).to have_key(:created_at)
+      expect(search_merchant).to have_key(:name)
+      expect(search_merchant).to have_key(:updated_at)
+    end
+    it 'can find a merchant with inputed created_at search term' do
+      Merchant.create(name: 'GarrettMerchant')
+      get "/api/v1/merchants/find?created_at=#{Date.today.strftime}"
+      search_merchant = JSON.parse(response.body, symbolize_names: true)
+      expect(response).to be_successful
+      expect(search_merchant).to have_key(:id)
+      expect(search_merchant).to have_key(:created_at)
+      expect(search_merchant).to have_key(:name)
+      expect(search_merchant).to have_key(:updated_at)
+    end
+  end
 end
