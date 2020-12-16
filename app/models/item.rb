@@ -5,7 +5,35 @@ class Item < ApplicationRecord
                         :description,
                         :unit_price
 
-  def self.find_single_item(search_term)
-    where('name').includes(search_term)
+  def self.find_single_item(params)
+    if params[:name]
+      where('name like ?', "%#{params[:name]}%")[0]
+    elsif params[:description]
+      where('description like ?', "%#{params[:description]}%")[0]
+    elsif params[:unit_price]
+      where('unit_price like ?', "%#{params[:unit_price]}%")[0]
+    elsif params[:created_at]
+      date = Date.parse(params[:created_at])
+      Item.where(created_at: date.beginning_of_day..date.end_of_day)[0]
+    elsif params[:updated_at]
+      date = Date.parse(params[:updated_at])
+      Item.where(updated_at: date.beginning_of_day..date.end_of_day)[0]
+    end
+  end
+
+  def self.find_multiple_items(params)
+    if params[:name]
+      where('name like ?', "%#{params[:name]}%")
+    elsif params[:description]
+      where('description like ?', "%#{params[:description]}%")
+    elsif params[:unit_price]
+      where('unit_price like ?', "%#{params[:unit_price]}%")
+    elsif params[:created_at]
+      date = Date.parse(params[:created_at])
+      Item.where(created_at: date.beginning_of_day..date.end_of_day)
+    elsif params[:updated_at]
+      date = Date.parse(params[:updated_at])
+      Item.where(updated_at: date.beginning_of_day..date.end_of_day)
+    end
   end
 end

@@ -98,4 +98,76 @@ describe 'Items API' do
       expect(merchant_by_item[:name]).to be_a(String)
     end
   end
+
+  describe 'search API' do
+    it 'can find an item with inputed name search' do
+      merchant = Merchant.create(name: 'GarrettMerchant')
+      Item.create(name: 'GarrettMerchant', description: 'Test item description', unit_price: 4.2, merchant_id: merchant.id )
+
+      get '/api/v1/items/find?name=Me'
+      search_item = JSON.parse(response.body, symbolize_names: true)
+      expect(response).to be_successful
+      expect(search_item).to have_key(:id)
+      expect(search_item).to have_key(:created_at)
+      expect(search_item).to have_key(:description)
+      expect(search_item).to have_key(:unit_price)
+      expect(search_item).to have_key(:updated_at)
+    end
+
+    it 'can find an item with inputed description search' do
+      merchant = Merchant.create(name: 'GarrettMerchant')
+      Item.create(name: 'GarrettMerchant', description: 'Test item description', unit_price: 4.2, merchant_id: merchant.id )
+
+      get '/api/v1/items/find?description=em'
+      search_item = JSON.parse(response.body, symbolize_names: true)
+      expect(response).to be_successful
+      expect(search_item).to have_key(:id)
+      expect(search_item).to have_key(:created_at)
+      expect(search_item).to have_key(:description)
+      expect(search_item).to have_key(:unit_price)
+      expect(search_item).to have_key(:updated_at)
+    end
+
+    xit 'can find an item with inputed unit_price search' do
+      merchant = Merchant.create(name: 'GarrettMerchant')
+      Item.create(name: 'GarrettMerchant', description: 'Test item description', unit_price: 4.2, merchant_id: merchant.id )
+
+      get '/api/v1/items/find?unit_price=4.2'
+      search_item = JSON.parse(response.body, symbolize_names: true)
+      expect(response).to be_successful
+      expect(search_item).to have_key(:id)
+      expect(search_item).to have_key(:created_at)
+      expect(search_item).to have_key(:description)
+      expect(search_item).to have_key(:unit_price)
+      expect(search_item).to have_key(:updated_at)
+    end
+
+    it 'can find an item with inputed created_at search' do
+      merchant = Merchant.create(name: 'GarrettMerchant')
+      Item.create(name: 'GarrettMerchant', description: 'Test item description', unit_price: 4.2, merchant_id: merchant.id )
+
+      get "/api/v1/items/find?created_at=#{Date.today.strftime}"
+      search_item = JSON.parse(response.body, symbolize_names: true)
+      expect(response).to be_successful
+      expect(search_item).to have_key(:id)
+      expect(search_item).to have_key(:created_at)
+      expect(search_item).to have_key(:description)
+      expect(search_item).to have_key(:unit_price)
+      expect(search_item).to have_key(:updated_at)
+    end
+
+    it 'can find an item with inputed updated_at search' do
+      merchant = Merchant.create(name: 'GarrettMerchant')
+      Item.create(name: 'GarrettMerchant', description: 'Test item description', unit_price: 4.2, merchant_id: merchant.id )
+
+      get "/api/v1/items/find?updated_at=#{Date.today.strftime}"
+      search_item = JSON.parse(response.body, symbolize_names: true)
+      expect(response).to be_successful
+      expect(search_item).to have_key(:id)
+      expect(search_item).to have_key(:created_at)
+      expect(search_item).to have_key(:description)
+      expect(search_item).to have_key(:unit_price)
+      expect(search_item).to have_key(:updated_at)
+    end
+  end
 end

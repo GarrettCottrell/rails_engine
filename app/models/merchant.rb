@@ -9,6 +9,9 @@ class Merchant < ApplicationRecord
     elsif params[:created_at]
       date = Date.parse(params[:created_at])
       Merchant.where(created_at: date.beginning_of_day..date.end_of_day)[0]
+    elsif params[:updated_at]
+      date = Date.parse(params[:updated_at])
+      Merchant.where(updated_at: date.beginning_of_day..date.end_of_day)[0]
     end
   end
 end
