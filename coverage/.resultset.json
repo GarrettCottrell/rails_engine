@@ -1,10 +1,8 @@
 {
   "RSpec": {
     "coverage": {
-      "/Users/garrettcottrell/mod3_projects/rails_train/rails_engine/app/models/merchant.rb": {
+      "/Users/garrettcottrell/mod3_projects/rails_train/rails_engine/app/models/item.rb": {
         "lines": [
-          1,
-          1,
           1,
           1,
           null
@@ -17,7 +15,16 @@
           null
         ]
       },
-      "/Users/garrettcottrell/mod3_projects/rails_train/rails_engine/app/controllers/api/v1/merchants_controller.rb": {
+      "/Users/garrettcottrell/mod3_projects/rails_train/rails_engine/app/models/merchant.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          1,
+          null
+        ]
+      },
+      "/Users/garrettcottrell/mod3_projects/rails_train/rails_engine/app/controllers/api/v1/items_controller.rb": {
         "lines": [
           1,
           1,
@@ -54,6 +61,57 @@
           null
         ]
       },
+      "/Users/garrettcottrell/mod3_projects/rails_train/rails_engine/app/controllers/api/v1/items/merchants_controller.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          1,
+          null,
+          null
+        ]
+      },
+      "/Users/garrettcottrell/mod3_projects/rails_train/rails_engine/app/controllers/api/v1/merchants_controller.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null,
+          null,
+          1,
+          1,
+          null,
+          null,
+          1,
+          1,
+          null,
+          null,
+          1,
+          1,
+          null,
+          null,
+          1,
+          1,
+          null,
+          null,
+          1,
+          null,
+          1,
+          2,
+          null,
+          null
+        ]
+      },
+      "/Users/garrettcottrell/mod3_projects/rails_train/rails_engine/app/controllers/api/v1/merchants/items_controller.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          1,
+          null,
+          null
+        ]
+      },
       "/Users/garrettcottrell/mod3_projects/rails_train/rails_engine/app/mailers/application_mailer.rb": {
         "lines": [
           0,
@@ -66,15 +124,6 @@
       },
       "/Users/garrettcottrell/mod3_projects/rails_train/rails_engine/app/models/invoice.rb": {
         "lines": [
-          0,
-          0
-        ],
-        "branches": {
-        }
-      },
-      "/Users/garrettcottrell/mod3_projects/rails_train/rails_engine/app/models/item.rb": {
-        "lines": [
-          0,
           0,
           0
         ],
@@ -142,6 +191,6 @@
         }
       }
     },
-    "timestamp": 1608134624
+    "timestamp": 1608141169
   }
 }

@@ -20,7 +20,7 @@ describe 'Merchants API' do
     end
   end
 
-  it 'can get one merchant by its id' do 
+  it 'can get one merchant by its id' do
     id = create(:merchant).id
 
     get "/api/v1/merchants/#{id}"
@@ -36,12 +36,12 @@ describe 'Merchants API' do
   end
 
   it 'can create a new merchant' do 
-    merchant_params = ({
-                    name: 'Garrett'
-                      })
-    headers = {"CONTENT_TYPE" => "application/json"}
+    merchant_params = {
+      name: 'Garrett'
+    }
+    headers = { 'CONTENT_TYPE' => 'application/json' }
 
-    post "/api/v1/merchants", headers: headers, params: JSON.generate(merchant: merchant_params)
+    post '/api/v1/merchants', headers: headers, params: JSON.generate(merchant: merchant_params)
     created_merchant = Merchant.last 
 
     expect(response).to be_successful
@@ -52,7 +52,7 @@ describe 'Merchants API' do
     id = create(:merchant).id
     previous_name = Merchant.last.name 
     merchant_params = { name: 'GarrettNew'}
-    headers = {'CONTENT_TYPE' => 'application/json'}
+    headers = { 'CONTENT_TYPE' => 'application/json' }
 
     patch "/api/v1/merchants/#{id}", headers: headers, params: JSON.generate({merchant: merchant_params})
     merchant = Merchant.find_by(id: id)
@@ -71,5 +71,27 @@ describe 'Merchants API' do
     expect(response).to be_successful 
     expect(Merchant.count).to eq(0)
     expect { Merchant.find(merchant.id) }.to raise_error(ActiveRecord::RecordNotFound)
+  end
+
+  describe 'relationship' do
+    it 'can find merchant items' do
+      merchant_1 = create(:merchant)
+      merchant_2 = create(:merchant)
+
+      create(:item, merchant_id: merchant_1.id)
+      create(:item, merchant_id: merchant_2.id)
+      create(:item, merchant_id: merchant_1.id)
+
+      get "/api/v1/merchants/#{merchant_2.id}/items"
+      merchant_items = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).to be_successful
+      expect(merchant_items[0]).to have_key(:name)
+      expect(merchant_items[0][:name]).to be_a(String)
+      expect(merchant_items[0]).to have_key(:description)
+      expect(merchant_items[0][:description]).to be_a(String)
+      expect(merchant_items[0]).to have_key(:unit_price)
+      expect(merchant_items[0][:unit_price]).to be_a(Float)
+    end
   end
 end
