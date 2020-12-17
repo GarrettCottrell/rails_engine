@@ -42,7 +42,7 @@ describe 'Items API' do
     }
     headers = { 'CONTENT_TYPE' => 'application/json' }
 
-    post '/api/v1/items', headers: headers, params: JSON.generate(item: item_params)
+    post '/api/v1/items', headers: headers, params: JSON.generate(item_params)
     created_item = Item.last
     expect(response).to be_successful
     expect(created_item.name).to eq(item_params[:name])
@@ -56,7 +56,7 @@ describe 'Items API' do
     }
     headers = { 'CONTENT_TYPE' => 'application/json' }
 
-    post "/api/v1/items/#{id}", headers: headers, params: JSON.generate({item: item_params})
+    patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate(item_params)
     item = Item.find_by(id: id)
 
     expect(response).to be_successful
