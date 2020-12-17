@@ -150,4 +150,52 @@ describe 'Merchants API' do
       end
     end
   end
+
+  describe 'BI endpoint, merchants with most revenue' do
+    it 'finds merchants with most revenue' do
+      customer1 = create(:customer)
+      customer2 = create(:customer)
+
+      merchant1 = create(:merchant)
+      item1 = create(:item, merchant_id: merchant1.id)
+      item2 = create(:item, merchant_id: merchant1.id)
+      invoice1 = create(:invoice, status: 'shipped', customer_id: customer1.id, merchant_id: merchant1.id)
+      invoiceitems1 = create(:invoiceitems, item_id: item1.id, invoice_id: invoice1.id, quantity: 1, unit_price: 15.00)
+      transaction1 = create(:transaction, invoice_id: invoice1.id, result: 'success')
+      invoice2 = create(:invoice, status: 'shipped', customer_id: customer2.id, merchant_id: merchant1.id)
+      invoiceitems2 = create(:invoiceitems, item_id: item2.id, invoice_id: invoice2.id, quantity: 2, unit_price: 15.00)
+      transaction2 = create(:transaction, invoice_id: invoice2.id, result: 'success')
+
+      merchant2 = create(:merchant)
+      item3 = create(:item, merchant_id: merchant2.id)
+      item4 = create(:item, merchant_id: merchant2.id)
+      invoice3 = create(:invoice, status: 'shipped', customer_id: customer1.id, merchant_id: merchant2.id)
+      invoiceitems3 = create(:invoiceitems, item_id: item3.id, invoice_id: invoice3.id, quantity: 3, unit_price: 20.00)
+      transaction3 = create(:transaction, invoice_id: invoice3.id, result: 'success')
+      invoice4 = create(:invoice, status: 'shipped', customer_id: customer2.id, merchant_id: merchant2.id)
+      invoiceitems4 = create(:invoiceitems, item_id: item4.id, invoice_id: invoice4.id, quantity: 4, unit_price: 20.00)
+      transaction4 = create(:transaction, invoice_id: invoice4.id, result: 'success')
+
+      merchant3 = create(:merchant)
+      item5 = create(:item, merchant_id: merchant3.id)
+      item6 = create(:item, merchant_id: merchant3.id)
+      invoice5 = create(:invoice, status: 'shipped', customer_id: customer1.id, merchant_id: merchant3.id)
+      invoiceitems5 = create(:invoiceitems, item_id: item5.id, invoice_id: invoice5.id, quantity: 5, unit_price: 10.00)
+      transaction5 = create(:transaction, invoice_id: invoice5.id, result: 'success')
+      invoice6 = create(:invoice, status: 'shipped', customer_id: customer2.id, merchant_id: merchant3.id)
+      invoiceitems6 = create(:invoiceitems, item_id: item6.id, invoice_id: invoice6.id, quantity: 6, unit_price: 10.00)
+      transaction6 = create(:transaction, invoice_id: invoice6.id, result: 'success')
+
+      get 'api/v1/merchants/most_revenue?quantity=2'
+
+      merchant_response = JSON.parse(response.body, symbolize_names: true)
+
+      expect(response).to be_successful
+      expect(merchant_response[:data]).to have_key(:id)
+
+      merchant_response[:data].each do |data|
+        expect(data[:attributes]).to have_key(:name)
+      end
+    end
+  end
 end
