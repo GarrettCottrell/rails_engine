@@ -7,7 +7,7 @@ class Item < ApplicationRecord
 
   def self.find_single_item(params)
     if params[:name]
-      where('name like ?', "%#{params[:name]}%")[0]
+      where('lower(name) like ?', "%#{params[:name]}%".downcase)[0]
     elsif params[:description]
       where('description like ?', "%#{params[:description]}%")[0]
     elsif params[:unit_price]
@@ -23,7 +23,7 @@ class Item < ApplicationRecord
 
   def self.find_multiple_items(params)
     if params[:name]
-      where('name like ?', "%#{params[:name]}%")
+      where('lower(name) like ?', "%#{params[:name]}%".downcase)
     elsif params[:description]
       where('description like ?', "%#{params[:description]}%")
     elsif params[:unit_price]
