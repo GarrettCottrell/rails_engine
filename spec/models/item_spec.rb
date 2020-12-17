@@ -29,7 +29,7 @@ describe Item, type: :model do
     xit 'find_single_item by unit_price' do
       merchant = create(:merchant)
       item = Item.create!(name: 'GarrettMerchant', description: 'Test item description', unit_price: 4.2, merchant_id: merchant.id )
-      params = {unit_price: 4}
+      params = {unit_price: '4'}
       expect(Item.find_single_item(params)).to eq(item)
     end
 

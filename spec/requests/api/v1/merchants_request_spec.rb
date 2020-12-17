@@ -10,13 +10,10 @@ describe 'Merchants API' do
 
     merchants = JSON.parse(response.body, symbolize_names: true)
 
-    expect(merchants.count).to eq(5)
-
-    merchants.each do |merchant|
-      expect(merchant).to have_key(:id)
-      expect(merchant[:id]).to be_an(Integer)
-      expect(merchant).to have_key(:name)
-      expect(merchant[:name]).to be_a(String)
+    expect(merchants[:data].count).to eq(5)
+    merchants[:data].each do |merchant|
+      expect(merchant[:attributes]).to have_key(:id)
+      expect(merchant[:attributes]).to have_key(:name)
     end
   end
 
@@ -28,11 +25,8 @@ describe 'Merchants API' do
 
     expect(response).to be_successful
 
-    expect(merchant).to have_key(:id)
-    expect(merchant[:id]).to eq(id)
-
-    expect(merchant).to have_key(:name)
-    expect(merchant[:name]).to be_a(String)
+    expect(merchant[:data][:attributes]).to have_key(:id)
+    expect(merchant[:data][:attributes]).to have_key(:name)
   end
 
   it 'can create a new merchant' do 
@@ -75,23 +69,19 @@ describe 'Merchants API' do
 
   describe 'relationship' do
     it 'can find merchant items' do
-      merchant_1 = create(:merchant)
-      merchant_2 = create(:merchant)
+      merchant1 = create(:merchant)
+      merchant2 = create(:merchant)
 
-      create(:item, merchant_id: merchant_1.id)
-      create(:item, merchant_id: merchant_2.id)
-      create(:item, merchant_id: merchant_1.id)
+      create(:item, merchant_id: merchant1.id)
+      create(:item, merchant_id: merchant2.id)
+      create(:item, merchant_id: merchant1.id)
 
-      get "/api/v1/merchants/#{merchant_2.id}/items"
+      get "/api/v1/merchants/#{merchant2.id}/items"
       merchant_items = JSON.parse(response.body, symbolize_names: true)
-
       expect(response).to be_successful
-      expect(merchant_items[0]).to have_key(:name)
-      expect(merchant_items[0][:name]).to be_a(String)
-      expect(merchant_items[0]).to have_key(:description)
-      expect(merchant_items[0][:description]).to be_a(String)
-      expect(merchant_items[0]).to have_key(:unit_price)
-      expect(merchant_items[0][:unit_price]).to be_a(Float)
+      expect(merchant_items[:data][0][:attributes]).to have_key(:name)
+      expect(merchant_items[:data][0][:attributes]).to have_key(:description)
+      expect(merchant_items[:data][0][:attributes]).to have_key(:unit_price)
     end
   end
 
@@ -102,21 +92,62 @@ describe 'Merchants API' do
       get '/api/v1/merchants/find?name=Ga'
       search_merchant = JSON.parse(response.body, symbolize_names: true)
       expect(response).to be_successful
-      expect(search_merchant).to have_key(:id)
-      expect(search_merchant).to have_key(:created_at)
-      expect(search_merchant).to have_key(:name)
-      expect(search_merchant).to have_key(:updated_at)
+      expect(search_merchant[:data][:attributes]).to have_key(:id)
+      expect(search_merchant[:data][:attributes]).to have_key(:name)
     end
 
     it 'can find a merchant with inputed created_at search term' do
       Merchant.create(name: 'GarrettMerchant')
-      get "/api/v1/merchants/find?created_at=#{Date.today.strftime}"
+      get "/api/v1/merchants/find?created_at='Thu, 17 Dec 2020 00:28:02 UTC'"
       search_merchant = JSON.parse(response.body, symbolize_names: true)
       expect(response).to be_successful
-      expect(search_merchant).to have_key(:id)
-      expect(search_merchant).to have_key(:created_at)
-      expect(search_merchant).to have_key(:name)
-      expect(search_merchant).to have_key(:updated_at)
+      expect(search_merchant[:data][:attributes]).to have_key(:id)
+      expect(search_merchant[:data][:attributes]).to have_key(:name)
+    end
+
+    it 'can find multiple merchants with name search' do
+      Merchant.create!(name: 'GarrettMerchant1')
+      Merchant.create(name: 'GarrettMerchant2')
+      Merchant.create(name: 'GarrettMerchant3')
+
+      get '/api/v1/merchants/find_all?name=Mer'
+      search_item = JSON.parse(response.body, symbolize_names: true)
+      expect(response).to be_successful
+      expect(search_item[:data].size).to eq(3)
+      search_item[:data].each do |data|
+      expect(data[:attributes]).to have_key(:id)
+      expect(data[:attributes]).to have_key(:name)
+      end
+    end
+
+    it 'can find multiple merchants with updated_at search' do
+      Merchant.create(name: 'GarrettMerchant1')
+      Merchant.create(name: 'GarrettMerchant2')
+      Merchant.create(name: 'GarrettMerchant3')
+
+      get "/api/v1/merchants/find_all?updated_at='Thu, 17 Dec 2020 00:28:02 UTC'"
+      search_item = JSON.parse(response.body, symbolize_names: true)
+      expect(response).to be_successful
+      expect(search_item[:data].size).to eq(3)
+      search_item[:data].each do |data|
+      expect(data[:attributes]).to have_key(:id)
+      expect(data[:attributes]).to have_key(:name)
+      end
+    end
+
+    it 'can find multiple merchants with updated_at search' do
+      Merchant.create(name: 'GarrettMerchant1')
+      Merchant.create(name: 'GarrettMerchant2')
+      Merchant.create(name: 'GarrettMerchant3')
+
+      get "/api/v1/merchants/find_all?updated_at='Thu, 17 Dec 2020 00:28:02 UTC'"
+      search_item = JSON.parse(response.body, symbolize_names: true)
+      expect(response).to be_successful
+      expect(search_item[:data].size).to eq(3)
+      search_item[:data].each do |data|
+        expect(data[:attributes]).to have_key(:id)
+        expect(data[:attributes]).to have_key(:name)
+      end
     end
   end
 end

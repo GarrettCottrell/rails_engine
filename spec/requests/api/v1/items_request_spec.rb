@@ -8,18 +8,14 @@ describe 'Items API' do
 
     expect(response).to be_successful
     items = JSON.parse(response.body, symbolize_names: true)
+ 
+    expect(items[:data].count).to eq(5)
 
-    expect(items.count).to eq(5)
-
-    items.each do |item|
-      expect(item).to have_key(:id)
-      expect(item[:id]).to be_an(Integer)
-      expect(item).to have_key(:name)
-      expect(item[:name]).to be_a(String)
-      expect(item).to have_key(:description)
-      expect(item[:description]).to be_a(String)
-      expect(item).to have_key(:unit_price)
-      expect(item[:unit_price]).to be_a(Float)
+    items[:data].each do |item|
+      expect(item[:attributes]).to have_key(:id)
+      expect(item[:attributes]).to have_key(:name)
+      expect(item[:attributes]).to have_key(:description)
+      expect(item[:attributes]).to have_key(:unit_price)
     end
   end
 
@@ -28,17 +24,12 @@ describe 'Items API' do
 
     get "/api/v1/items/#{id}"
     item = JSON.parse(response.body, symbolize_names: true)
-
     expect(response).to be_successful
 
-    expect(item).to have_key(:id)
-    expect(item[:id]).to be_an(Integer)
-    expect(item).to have_key(:name)
-    expect(item[:name]).to be_a(String)
-    expect(item).to have_key(:description)
-    expect(item[:description]).to be_a(String)
-    expect(item).to have_key(:unit_price)
-    expect(item[:unit_price]).to be_a(Float)
+    expect(item[:data][:attributes]).to have_key(:id)
+    expect(item[:data][:attributes]).to have_key(:name)
+    expect(item[:data][:attributes]).to have_key(:description)
+    expect(item[:data][:attributes]).to have_key(:unit_price)
   end
 
   it 'can create a new item' do 
@@ -53,7 +44,6 @@ describe 'Items API' do
 
     post '/api/v1/items', headers: headers, params: JSON.generate(item: item_params)
     created_item = Item.last
-
     expect(response).to be_successful
     expect(created_item.name).to eq(item_params[:name])
   end
@@ -94,8 +84,7 @@ describe 'Items API' do
       merchant_by_item = JSON.parse(response.body, symbolize_names: true)
 
       expect(response).to be_successful
-      expect(merchant_by_item).to have_key(:name)
-      expect(merchant_by_item[:name]).to be_a(String)
+      expect(merchant_by_item[:data][:attributes]).to have_key(:name)
     end
   end
 
@@ -107,11 +96,9 @@ describe 'Items API' do
       get '/api/v1/items/find?name=Me'
       search_item = JSON.parse(response.body, symbolize_names: true)
       expect(response).to be_successful
-      expect(search_item).to have_key(:id)
-      expect(search_item).to have_key(:created_at)
-      expect(search_item).to have_key(:description)
-      expect(search_item).to have_key(:unit_price)
-      expect(search_item).to have_key(:updated_at)
+      expect(search_item[:data][:attributes]).to have_key(:id)
+      expect(search_item[:data][:attributes]).to have_key(:description)
+      expect(search_item[:data][:attributes]).to have_key(:unit_price)
     end
 
     it 'can find an item with inputed description search' do
@@ -121,11 +108,9 @@ describe 'Items API' do
       get '/api/v1/items/find?description=em'
       search_item = JSON.parse(response.body, symbolize_names: true)
       expect(response).to be_successful
-      expect(search_item).to have_key(:id)
-      expect(search_item).to have_key(:created_at)
-      expect(search_item).to have_key(:description)
-      expect(search_item).to have_key(:unit_price)
-      expect(search_item).to have_key(:updated_at)
+      expect(search_item[:data][:attributes]).to have_key(:id)
+      expect(search_item[:data][:attributes]).to have_key(:description)
+      expect(search_item[:data][:attributes]).to have_key(:unit_price)
     end
 
     xit 'can find an item with inputed unit_price search' do
@@ -146,28 +131,24 @@ describe 'Items API' do
       merchant = Merchant.create(name: 'GarrettMerchant')
       Item.create(name: 'GarrettMerchant', description: 'Test item description', unit_price: 4.2, merchant_id: merchant.id )
 
-      get "/api/v1/items/find?created_at=#{Date.today.strftime}"
+      get "/api/v1/items/find?created_at='Thu, 17 Dec 2020 00:28:02 UTC'"
       search_item = JSON.parse(response.body, symbolize_names: true)
       expect(response).to be_successful
-      expect(search_item).to have_key(:id)
-      expect(search_item).to have_key(:created_at)
-      expect(search_item).to have_key(:description)
-      expect(search_item).to have_key(:unit_price)
-      expect(search_item).to have_key(:updated_at)
+      expect(search_item[:data][:attributes]).to have_key(:id)
+      expect(search_item[:data][:attributes]).to have_key(:description)
+      expect(search_item[:data][:attributes]).to have_key(:unit_price)
     end
 
     it 'can find an item with inputed updated_at search' do
       merchant = Merchant.create(name: 'GarrettMerchant')
       Item.create(name: 'GarrettMerchant', description: 'Test item description', unit_price: 4.2, merchant_id: merchant.id )
 
-      get "/api/v1/items/find?updated_at=#{Date.today.strftime}"
+      get "/api/v1/items/find?updated_at='Thu, 17 Dec 2020 00:28:02 UTC'"
       search_item = JSON.parse(response.body, symbolize_names: true)
       expect(response).to be_successful
-      expect(search_item).to have_key(:id)
-      expect(search_item).to have_key(:created_at)
-      expect(search_item).to have_key(:description)
-      expect(search_item).to have_key(:unit_price)
-      expect(search_item).to have_key(:updated_at)
+      expect(search_item[:data][:attributes]).to have_key(:id)
+      expect(search_item[:data][:attributes]).to have_key(:description)
+      expect(search_item[:data][:attributes]).to have_key(:unit_price)
     end
 
     it 'can find multiple items with name search' do
@@ -179,12 +160,12 @@ describe 'Items API' do
       get '/api/v1/items/find_all?name=ttM'
       search_item = JSON.parse(response.body, symbolize_names: true)
       expect(response).to be_successful
-      expect(search_item.size).to eq(3)
-      expect(search_item[0]).to have_key(:id)
-      expect(search_item[0]).to have_key(:created_at)
-      expect(search_item[0]).to have_key(:description)
-      expect(search_item[0]).to have_key(:unit_price)
-      expect(search_item[0]).to have_key(:updated_at)
+      expect(search_item[:data].size).to eq(3)
+      search_item[:data].each do |data|
+      expect(data[:attributes]).to have_key(:id)
+      expect(data[:attributes]).to have_key(:description)
+      expect(data[:attributes]).to have_key(:unit_price)
+      end
     end
 
     it 'can find multiple items with description search' do
@@ -196,12 +177,12 @@ describe 'Items API' do
       get '/api/v1/items/find_all?description=item'
       search_item = JSON.parse(response.body, symbolize_names: true)
       expect(response).to be_successful
-      expect(search_item.size).to eq(3)
-      expect(search_item[0]).to have_key(:id)
-      expect(search_item[0]).to have_key(:created_at)
-      expect(search_item[0]).to have_key(:description)
-      expect(search_item[0]).to have_key(:unit_price)
-      expect(search_item[0]).to have_key(:updated_at)
+      expect(search_item[:data].size).to eq(3)
+      search_item[:data].each do |data|
+      expect(data[:attributes]).to have_key(:id)
+      expect(data[:attributes]).to have_key(:description)
+      expect(data[:attributes]).to have_key(:unit_price)
+      end
     end
 
     xit 'can find multiple items with unit_price search' do
@@ -227,15 +208,15 @@ describe 'Items API' do
       Item.create(name: 'GarrettMerchant2', description: 'Test item description2', unit_price: 4.3, merchant_id: merchant.id )
       Item.create(name: 'GarrettMerchant3', description: 'Test item description3', unit_price: 4.4, merchant_id: merchant.id )
 
-      get "/api/v1/items/find_all?created_at=#{Date.today.strftime}"
+      get "/api/v1/items/find_all?created_at='Thu, 17 Dec 2020 00:28:02 UTC'"
       search_item = JSON.parse(response.body, symbolize_names: true)
       expect(response).to be_successful
-      expect(search_item.size).to eq(3)
-      expect(search_item[0]).to have_key(:id)
-      expect(search_item[0]).to have_key(:created_at)
-      expect(search_item[0]).to have_key(:description)
-      expect(search_item[0]).to have_key(:unit_price)
-      expect(search_item[0]).to have_key(:updated_at)
+      expect(search_item[:data].size).to eq(3)
+      search_item[:data].each do |data|
+        expect(data[:attributes]).to have_key(:id)
+        expect(data[:attributes]).to have_key(:description)
+        expect(data[:attributes]).to have_key(:unit_price)
+      end
     end
 
     it 'can find multiple items with updated_at search' do
@@ -244,15 +225,15 @@ describe 'Items API' do
       Item.create(name: 'GarrettMerchant2', description: 'Test item description2', unit_price: 4.3, merchant_id: merchant.id )
       Item.create(name: 'GarrettMerchant3', description: 'Test item description3', unit_price: 4.4, merchant_id: merchant.id )
 
-      get "/api/v1/items/find_all?updated_at=#{Date.today.strftime}"
+      get "/api/v1/items/find_all?updated_at='Thu, 17 Dec 2020 00:28:02 UTC'"
       search_item = JSON.parse(response.body, symbolize_names: true)
       expect(response).to be_successful
-      expect(search_item.size).to eq(3)
-      expect(search_item[0]).to have_key(:id)
-      expect(search_item[0]).to have_key(:created_at)
-      expect(search_item[0]).to have_key(:description)
-      expect(search_item[0]).to have_key(:unit_price)
-      expect(search_item[0]).to have_key(:updated_at)
+      expect(search_item[:data].size).to eq(3)
+      search_item[:data].each do |data|
+        expect(data[:attributes]).to have_key(:id)
+        expect(data[:attributes]).to have_key(:description)
+        expect(data[:attributes]).to have_key(:unit_price)
+      end
     end
   end
 end
