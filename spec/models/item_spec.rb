@@ -36,15 +36,24 @@ describe Item, type: :model do
     it 'find_single_item by created_at' do
       merchant = create(:merchant)
       item = Item.create!(name: 'GarrettMerchant', description: 'Test item description', unit_price: 4.2, merchant_id: merchant.id )
-      params = {created_at: Date.today.strftime }
+      params = {created_at: 'Thu, 17 Dec 2020 00:28:02 UTC' }
       expect(Item.find_single_item(params)).to eq(item)
     end
 
     it 'find_single_item by updated_at' do
       merchant = create(:merchant)
       item = Item.create!(name: 'GarrettMerchant', description: 'Test item description', unit_price: 4.2, merchant_id: merchant.id )
-      params = {updated_at: Date.today.strftime }
+      params = {updated_at: 'Thu, 17 Dec 2020 00:28:02 UTC' }
       expect(Item.find_single_item(params)).to eq(item)
+    end
+
+    it 'find_all_items by name search' do
+      merchant = create(:merchant)
+      item1 = Item.create!(name: 'GarrettMerchant1', description: 'Test item description1', unit_price: 4.2, merchant_id: merchant.id )
+      item2 = Item.create!(name: 'GarrettMerchant2', description: 'Test item description2', unit_price: 4.3, merchant_id: merchant.id )
+      item3 = Item.create!(name: 'GarrettMerchant3', description: 'Test item description3', unit_price: 4.4, merchant_id: merchant.id )
+      params = {name: 'ttM' }
+      expect(Item.find_multiple_items(params)).to eq([item1, item2, item3])
     end
   end
 end
