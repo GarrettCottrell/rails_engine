@@ -9,6 +9,9 @@ describe Item, type: :model do
 
   describe 'relationships' do
     it { should belong_to :merchant }
+    it { should have_many :invoice_items }
+    it { should have_many(:invoices).through :invoice_items }
+    it { should have_many(:transactions).through :invoices }
   end
 
   describe 'class methods' do
@@ -36,14 +39,14 @@ describe Item, type: :model do
     it 'find_single_item by created_at' do
       merchant = create(:merchant)
       item = Item.create!(name: 'GarrettMerchant', description: 'Test item description', unit_price: 4.2, merchant_id: merchant.id )
-      params = {created_at: 'Thu, 17 Dec 2020 00:28:02 UTC' }
+      params = {created_at: 'Fri, 18 Dec 2020 00:06:48 UTC +00:00' }
       expect(Item.find_single_item(params)).to eq(item)
     end
 
     it 'find_single_item by updated_at' do
       merchant = create(:merchant)
       item = Item.create!(name: 'GarrettMerchant', description: 'Test item description', unit_price: 4.2, merchant_id: merchant.id )
-      params = {updated_at: 'Thu, 17 Dec 2020 00:28:02 UTC' }
+      params = {updated_at: 'Fri, 18 Dec 2020 00:06:48 UTC +00:00' }
       expect(Item.find_single_item(params)).to eq(item)
     end
 

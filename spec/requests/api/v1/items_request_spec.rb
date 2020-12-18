@@ -131,7 +131,7 @@ describe 'Items API' do
       merchant = Merchant.create(name: 'GarrettMerchant')
       Item.create(name: 'GarrettMerchant', description: 'Test item description', unit_price: 4.2, merchant_id: merchant.id )
 
-      get "/api/v1/items/find?created_at='Thu, 17 Dec 2020 00:28:02 UTC'"
+      get "/api/v1/items/find?created_at='Fri, 18 Dec 2020 00:06:48 UTC +00:00'"
       search_item = JSON.parse(response.body, symbolize_names: true)
       expect(response).to be_successful
       expect(search_item[:data][:attributes]).to have_key(:id)
@@ -143,7 +143,7 @@ describe 'Items API' do
       merchant = Merchant.create(name: 'GarrettMerchant')
       Item.create(name: 'GarrettMerchant', description: 'Test item description', unit_price: 4.2, merchant_id: merchant.id )
 
-      get "/api/v1/items/find?updated_at='Thu, 17 Dec 2020 00:28:02 UTC'"
+      get "/api/v1/items/find?updated_at='Fri, 18 Dec 2020 00:06:48 UTC +00:00'"
       search_item = JSON.parse(response.body, symbolize_names: true)
       expect(response).to be_successful
       expect(search_item[:data][:attributes]).to have_key(:id)
@@ -208,7 +208,7 @@ describe 'Items API' do
       Item.create(name: 'GarrettMerchant2', description: 'Test item description2', unit_price: 4.3, merchant_id: merchant.id )
       Item.create(name: 'GarrettMerchant3', description: 'Test item description3', unit_price: 4.4, merchant_id: merchant.id )
 
-      get "/api/v1/items/find_all?created_at='Thu, 17 Dec 2020 00:28:02 UTC'"
+      get "/api/v1/items/find_all?created_at='Fri, 18 Dec 2020 00:06:48 UTC +00:00'"
       search_item = JSON.parse(response.body, symbolize_names: true)
       expect(response).to be_successful
       expect(search_item[:data].size).to eq(3)
@@ -225,7 +225,7 @@ describe 'Items API' do
       Item.create(name: 'GarrettMerchant2', description: 'Test item description2', unit_price: 4.3, merchant_id: merchant.id )
       Item.create(name: 'GarrettMerchant3', description: 'Test item description3', unit_price: 4.4, merchant_id: merchant.id )
 
-      get "/api/v1/items/find_all?updated_at='Thu, 17 Dec 2020 00:28:02 UTC'"
+      get "/api/v1/items/find_all?updated_at='Fri, 18 Dec 2020 00:06:48 UTC +00:00'"
       search_item = JSON.parse(response.body, symbolize_names: true)
       expect(response).to be_successful
       expect(search_item[:data].size).to eq(3)
