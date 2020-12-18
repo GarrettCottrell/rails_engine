@@ -14,8 +14,8 @@ class Item < ApplicationRecord
       where('lower(name) like ?', "%#{params[:name]}%".downcase)[0]
     elsif params[:description]
       where('description like ?', "%#{params[:description]}%")[0]
-    elsif params[:unit_price]
-      where('unit_price like ?', "%#{params[:unit_price]}%")[0]
+    #elsif params[:unit_price]
+      #where('unit_price ?' "%#{params[:unit_price].to_f}%")[0]
     elsif params[:created_at]
       date = Date.parse(params[:created_at])
       Item.where(created_at: date.beginning_of_day..date.end_of_day)[0]
@@ -30,8 +30,8 @@ class Item < ApplicationRecord
       where('lower(name) like ?', "%#{params[:name]}%".downcase)
     elsif params[:description]
       where('description like ?', "%#{params[:description]}%")
-    elsif params[:unit_price]
-      where('unit_price like ?', "%#{params[:unit_price]}%")
+    #elsif params[:unit_price]
+      #where('unit_price like ?', "%#{params[:unit_price]}%")
     elsif params[:created_at]
       date = Date.parse(params[:created_at])
       Item.where(created_at: date.beginning_of_day..date.end_of_day)

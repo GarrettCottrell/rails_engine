@@ -113,19 +113,19 @@ describe 'Items API' do
       expect(search_item[:data][:attributes]).to have_key(:unit_price)
     end
 
-    xit 'can find an item with inputed unit_price search' do
-      merchant = Merchant.create(name: 'GarrettMerchant')
-      Item.create(name: 'GarrettMerchant', description: 'Test item description', unit_price: 4.2, merchant_id: merchant.id )
+    # it 'can find an item with inputed unit_price search' do
+    #   merchant = Merchant.create(name: 'GarrettMerchant')
+    #   Item.create(name: 'GarrettMerchant', description: 'Test item description', unit_price: 4.2, merchant_id: merchant.id )
 
-      get '/api/v1/items/find?unit_price=4.2'
-      search_item = JSON.parse(response.body, symbolize_names: true)
-      expect(response).to be_successful
-      expect(search_item).to have_key(:id)
-      expect(search_item).to have_key(:created_at)
-      expect(search_item).to have_key(:description)
-      expect(search_item).to have_key(:unit_price)
-      expect(search_item).to have_key(:updated_at)
-    end
+    #   get '/api/v1/items/find?unit_price=4.2'
+    #   search_item = JSON.parse(response.body, symbolize_names: true)
+    #   expect(response).to be_successful
+    #   expect(search_item).to have_key(:id)
+    #   expect(search_item).to have_key(:created_at)
+    #   expect(search_item).to have_key(:description)
+    #   expect(search_item).to have_key(:unit_price)
+    #   expect(search_item).to have_key(:updated_at)
+    # end
 
     it 'can find an item with inputed created_at search' do
       merchant = Merchant.create(name: 'GarrettMerchant')
@@ -185,22 +185,22 @@ describe 'Items API' do
       end
     end
 
-    xit 'can find multiple items with unit_price search' do
-      merchant = Merchant.create(name: 'GarrettMerchant')
-      Item.create(name: 'GarrettMerchant1', description: 'Test item description1', unit_price: 4.2, merchant_id: merchant.id )
-      Item.create(name: 'GarrettMerchant2', description: 'Test item description2', unit_price: 4.3, merchant_id: merchant.id )
-      Item.create(name: 'GarrettMerchant3', description: 'Test item description3', unit_price: 4.4, merchant_id: merchant.id )
+    # xit 'can find multiple items with unit_price search' do
+    #   merchant = Merchant.create(name: 'GarrettMerchant')
+    #   Item.create(name: 'GarrettMerchant1', description: 'Test item description1', unit_price: 4.2, merchant_id: merchant.id )
+    #   Item.create(name: 'GarrettMerchant2', description: 'Test item description2', unit_price: 4.3, merchant_id: merchant.id )
+    #   Item.create(name: 'GarrettMerchant3', description: 'Test item description3', unit_price: 4.4, merchant_id: merchant.id )
 
-      get '/api/v1/items/find_all?unit_price=4'
-      search_item = JSON.parse(response.body, symbolize_names: true)
-      expect(response).to be_successful
-      expect(search_item.size).to eq(3)
-      expect(search_item[0]).to have_key(:id)
-      expect(search_item[0]).to have_key(:created_at)
-      expect(search_item[0]).to have_key(:description)
-      expect(search_item[0]).to have_key(:unit_price)
-      expect(search_item[0]).to have_key(:updated_at)
-    end
+    #   get '/api/v1/items/find_all?unit_price=4'
+    #   search_item = JSON.parse(response.body, symbolize_names: true)
+    #   expect(response).to be_successful
+    #   expect(search_item.size).to eq(3)
+    #   expect(search_item[0]).to have_key(:id)
+    #   expect(search_item[0]).to have_key(:created_at)
+    #   expect(search_item[0]).to have_key(:description)
+    #   expect(search_item[0]).to have_key(:unit_price)
+    #   expect(search_item[0]).to have_key(:updated_at)
+    # end
 
     it 'can find multiple items with created_at search' do
       merchant = Merchant.create(name: 'GarrettMerchant')

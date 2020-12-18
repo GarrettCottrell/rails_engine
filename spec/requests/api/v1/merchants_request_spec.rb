@@ -283,10 +283,7 @@ describe 'Merchants API' do
       merchant_response = JSON.parse(response.body, symbolize_names: true)
 
       expect(response).to be_successful
-
-      merchant_response[:data].each do |data|
-        expect(data[:attributes]).to have_key(:revenue)
-      end
+      expect(merchant_response[:data][:attributes]).to have_key(:revenue)
     end
   end
 end
